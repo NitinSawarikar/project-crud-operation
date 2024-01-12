@@ -1,0 +1,63 @@
+
+<div mat-dialog-title>
+    <h2>Users Form</h2>
+</div>
+
+<form [formGroup]="userForm" (ngSubmit)="onFormSubmit()">
+    <div mat-dialog-content class="content">
+        <div class="row">
+            <mat-form-field appearance="outline">
+                <mat-label>First Name</mat-label>
+                <input matInput type="text" placeholder="Enter your First Name" formControlName="firstName">
+                <mat-error *ngIf="userForm.get('firstName')?.hasError('required')">First Name is required</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Last Name</mat-label>
+                <input matInput type="text" placeholder="Enter your Last Name" formControlName="lastName">
+                <mat-error *ngIf="userForm.get('lastName')?.hasError('required')">Last Name is required</mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="row">
+            <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput type="text" placeholder="Enter your Email" formControlName="email">
+                <mat-error *ngIf="userForm.get('email')?.hasError('required')">Email is required</mat-error>
+                <mat-error *ngIf="userForm.get('email')?.hasError('email')">Invalid email format</mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+                <mat-label>Date Of Birth</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="dob">
+                <mat-hint>MM/DD/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="userForm.get('dob')?.hasError('required')">Date of Birth is required</mat-error>
+            </mat-form-field>
+        </div>
+        <div class="row">
+            <mat-radio-group aria-label="Select an option" formControlName="gender">
+                <mat-label>Gender</mat-label>
+                <mat-radio-button value="male">Male</mat-radio-button>
+                <mat-radio-button value="female">Female</mat-radio-button>
+                <mat-radio-button value="others">Others</mat-radio-button>
+            </mat-radio-group>
+        </div>
+
+        <div class="row">
+            <mat-form-field appearance="outline">
+                <mat-label>Role</mat-label>
+                <mat-select formControlName="role">
+                    <mat-option *ngFor="let val of userRole" [value]="val">{{val}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="userForm.get('role')?.hasError('required')">Role is required</mat-error>
+            </mat-form-field>
+        </div>
+
+    </div>
+    <div mat-dialog-actions class="action">
+        <button mat-button color="warn" (click)="onCancel()">Cancel</button>
+        <button mat-raised-button color="primary" type="submit">Save</button>
+    </div>
+</form>

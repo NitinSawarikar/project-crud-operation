@@ -1,0 +1,18 @@
+.main-body{
+    margin: 0 auto;
+    max-width: 1248px;
+    padding-top: 20px;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+.mat-form-field {
+    margin-bottom: 15px;
+  }
+  
+  .mat-elevation-z8 {
+    margin-top: 20px;
+  }
+  
