@@ -16,12 +16,17 @@ export class UserService {
     return of(data);
   }
 
-  getEmployeesLocally(): any[] {
+  getEmployeesLocally():  any[] {
     const existingDataString = localStorage.getItem('userData');
     return existingDataString ? JSON.parse(existingDataString) : [];
   }
 
+
+
   clearAllEmployeesLocally(): void {
     localStorage.removeItem('userData');
+
+
+
   }
 }

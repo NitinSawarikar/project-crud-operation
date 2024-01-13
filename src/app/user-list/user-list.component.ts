@@ -1,4 +1,3 @@
-
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { UserDataService } from '../user-data.service';
@@ -31,7 +30,14 @@ export class UserListComponent implements OnInit {
   }
 
   loadUsers() {
-    this.dataSource.data = this.userDataService.getUserData();
+    this.userDataService.getUserData().subscribe(
+      data => {
+        this.dataSource.data = data;
+      },
+      error => {
+        console.error('Error fetching user data:', error);
+      }
+    );
   }
 
   applyFilter(event: Event) {
@@ -42,31 +48,35 @@ export class UserListComponent implements OnInit {
   editUser(user: any) {
     const dialogRef = this.dialog.open(AddEditComponent, {
       width: '400px',
-      data: { mode: 'edit', user: { ...user } }, 
+      data: { mode: 'edit', user: { ...user } },
     });
-  
+
     dialogRef.afterClosed().subscribe((updatedUser) => {
-      console.log('Dialog result:', updatedUser);
       if (updatedUser !== undefined) {
-        const index = this.dataSource.data.findIndex(u => u.email === user.email);
-  
-        this.dataSource.data[index] = updatedUser;
-        this.dataSource._updateChangeSubscription(); 
-  
-        this.userDataService.updateUserData(updatedUser);
+        this.updateDataSource(user, updatedUser);
+        this.updateUserData(updatedUser);
       }
     });
   }
-  
 
   deleteUser(user: any) {
-    console.log('Delete user:', user);
-
     const index = this.dataSource.data.findIndex((u) => u.email === user.email);
     if (index !== -1) {
       this.dataSource.data.splice(index, 1);
-      this.dataSource._updateChangeSubscription(); 
-      this.userDataService.deleteUserData(user); 
+      this.dataSource._updateChangeSubscription();
+      this.userDataService.deleteUserData(user);
     }
+  }
+
+  private updateDataSource(oldUser: any, newUser: any) {
+    const index = this.dataSource.data.findIndex(u => u.email === oldUser.email);
+    if (index !== -1) {
+      this.dataSource.data[index] = newUser;
+      this.dataSource._updateChangeSubscription();
+    }
+  }
+
+  private updateUserData(user: any) {
+    this.userDataService.updateUserData(user);
   }
 }
